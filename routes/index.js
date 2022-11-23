@@ -26,8 +26,17 @@ router.post("/create", async (req, res, next) => {
 router.put("/course/:id", async (req, res, next) => {
   const { id } = req.params;
   const body = req.body;
-  const course = await Course.findByIdAndUpdate(id, body, { new: true });
-  res.json({ course });
+  const course = await Course.findByIdAndUpdate(id, body, {
+    new: true,
+  });
+  res.json({ msg: "Succesfully Updated", course });
+});
+
+router.delete("/course/:id", async (req, res, next) => {
+  const { id } = req.params;
+  const course = await Course.findByIdAndDelete(id);
+
+  res.json({ msg: "Succesfully Deleted", course });
 });
 
 module.exports = router;
