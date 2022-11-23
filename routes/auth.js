@@ -1,4 +1,6 @@
 const router = require("express").Router();
+const { genSaltSync, hashSync, compareSync } = require("bcryptjs");
+const User = require("../models/User.model");
 
 router.get("/signup", (req, res, next) => {
   res.json("Welcome to signup");
