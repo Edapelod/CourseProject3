@@ -14,6 +14,9 @@ const courseSchema = new Schema({
   price: {
     type: Number,
   },
+  video: {
+    type: String,
+  },
 });
 
 const Course = model("Course", courseSchema);

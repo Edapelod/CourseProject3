@@ -23,6 +23,17 @@ router.post("/create", async (req, res, next) => {
   }
 });
 
+router.get("/course/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const course = await Course.findById(id);
+
+    res.json({ ...course._doc });
+  } catch (error) {
+    res.status(404).json({ message: "No Course with this id" });
+  }
+});
+
 router.put("/course/:id", async (req, res, next) => {
   const { id } = req.params;
   const body = req.body;
