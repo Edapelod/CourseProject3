@@ -64,7 +64,8 @@ router.get("/verify", isAuthenticated, (req, res) => {
 
   // Send back the object with user data
   // previously set as the token payload
-  res.status(200);
+  res.status(200).json({ payload: req.payload, message: 'Token OK' })
+
 });
 
 module.exports = router;
