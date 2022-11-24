@@ -4,10 +4,6 @@ const User = require("../models/User.model");
 const jwt = require("jsonwebtoken");
 const isAuthenticated = require("../middlewares/isAuthenticated");
 
-router.get("/signup", (req, res, next) => {
-  res.json("Welcome to signup");
-});
-
 router.post("/signup", async (req, res) => {
   try {
     const salt = bcrypt.genSaltSync(11);
@@ -26,20 +22,19 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-router.get("/login", (req, res, next) => {
-  res.json("Login");
-});
-
 router.post("/login", async (req, res) => {
+  console.log(req.body);
   try {
     const { username, password } = req.body;
     const currentUser = await User.findOne({ username });
+    console.log("first currentuser", currentUser);
     if (!currentUser) {
       res.json({ errorMessage: "No user with this username" });
     } else {
       if (bcrypt.compareSync(password, currentUser.password)) {
         const userCopy = { ...currentUser._doc };
         delete userCopy.password;
+
         const authToken = jwt.sign(
           {
             expiresIn: "6h",
@@ -50,9 +45,8 @@ router.post("/login", async (req, res) => {
             algorithm: "HS256",
           }
         );
-        res
-          .status(200)
-          .json({ msg: "Succesfully logged in", token: authToken });
+        console.log("the token", authToken);
+        res.status(200).json(authToken);
       } else {
         res.status(400).json({ msg: "Incorrect password" });
       }
@@ -70,7 +64,7 @@ router.get("/verify", isAuthenticated, (req, res) => {
 
   // Send back the object with user data
   // previously set as the token payload
-  res.status(200).json({ payload: req.payload, message: "Token OK" });
+  res.status(200);
 });
 
 module.exports = router;

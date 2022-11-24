@@ -3,10 +3,6 @@ const isAuthenticated = require("../middlewares/isAuthenticated");
 const User = require("../models/User.model");
 const Course = require("../models/Course");
 
-router.get("/", (req, res, next) => {
-  res.json("All good in here");
-});
-
 router.get("/courses", async (req, res, next) => {
   const courses = await Course.find();
 
