@@ -22,7 +22,11 @@ const userSchema = new Schema({
   membership: {
     type: String,
     required: [true, "Please select one option"],
-    enum: ["teacher","student"],
+    enum: ["teacher", "student"],
+  },
+  credit: {
+    type: Number,
+    default: 0,
   },
 });
 
