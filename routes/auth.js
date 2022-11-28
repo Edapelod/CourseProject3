@@ -4,13 +4,14 @@ const User = require("../models/User.model");
 const jwt = require("jsonwebtoken");
 const isAuthenticated = require("../middlewares/isAuthenticated");
 const { token } = require("morgan");
-
-router.post("/signup", async (req, res) => {
+const uploader = require("../middlewares/cloudinary.config.js");
+router.post("/signup", uploader.single("imageUrl"), async (req, res) => {
   try {
     const salt = bcrypt.genSaltSync(11);
     const passwordHash = bcrypt.hashSync(req.body.password, salt);
-
+      console.log(req.file.path);
     await User.create({
+      profile:req.file.path,
       username: req.body.username,
       password: passwordHash,
       email: req.body.email,

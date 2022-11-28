@@ -28,6 +28,9 @@ const userSchema = new Schema({
     type: Number,
     default: 0,
   },
+  profile:{
+    type:String,
+  }
 });
 
 const User = model("User", userSchema);
