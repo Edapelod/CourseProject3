@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const User = require("../models/User.model");
 const jwt = require("jsonwebtoken");
 const isAuthenticated = require("../middlewares/isAuthenticated");
+const { token } = require("morgan");
 
 router.post("/signup", async (req, res) => {
   try {
@@ -58,12 +59,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/verify", isAuthenticated, (req, res) => {
-  // If JWT token is valid the payload gets decoded by the
-  // isAuthenticated middleware and made available on `req.payload`
   console.log(`req.payload`, req.payload);
-
-  // Send back the object with user data
-  // previously set as the token payload
   res.status(200).json({ payload: req.payload, message: 'Token OK' })
 
 });

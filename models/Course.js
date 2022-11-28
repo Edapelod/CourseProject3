@@ -3,8 +3,8 @@ const { Schema, model } = require("mongoose");
 // TODO: Please make sure you edit the User model to whatever makes sense in this case
 const courseSchema = new Schema({
   image: {
-    type: String,
-  },
+    type: String
+},
   title: {
     type: String,
   },
@@ -17,7 +17,7 @@ const courseSchema = new Schema({
   video: {
     type: String,
   },
-  createdby:{type: Schema.Types.ObjectId, ref:"User"}
+  // createdby:{type: Schema.Types.ObjectId, ref:"User"}
   
 });
 
