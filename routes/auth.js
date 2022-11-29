@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const isAuthenticated = require("../middlewares/isAuthenticated");
 const { token } = require("morgan");
 const uploader = require("../middlewares/cloudinary.config.js");
+
 router.post("/signup", uploader.single("imageUrl"), async (req, res) => {
   try {
     const salt = bcrypt.genSaltSync(11);
@@ -22,6 +23,32 @@ router.post("/signup", uploader.single("imageUrl"), async (req, res) => {
     console.log("the error", error.message);
     res.status(404).json({ errorMessage: error.message });
   }
+});
+
+// ,
+router.put("/profile/:id",uploader.single("imageUrl"),async (req, res, next) => {
+  const { id } = req.params;
+  console.log(id)
+try {
+  const salt = bcrypt.genSaltSync(11);
+  const passwordHash = bcrypt.hashSync(req.body.password, salt);
+  const data = {
+    username: req.body.username,
+    email: req.body.email,
+    password: passwordHash,
+    membership: req.body.membership,
+    profile: req.file.path,
+  };
+  console.log(data)
+  const edit = await User.findByIdAndUpdate(id, data, {
+    new: true,
+  });
+  res.json({ msg: "Succesfully Updated", edit });
+} catch (error) {
+  console.log("the error", error.message);
+    res.status(404).json({ errorMessage: error.message });
+}
+
 });
 
 router.post("/login", async (req, res) => {

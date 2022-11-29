@@ -66,6 +66,9 @@ router.post("/credit", isAuthenticated, async (req, res, next) => {
   res.json({ msg: "Credit updated", userFound });
 });
 
+
+
+
 router.delete("/course/:id", async (req, res, next) => {
   const { id } = req.params;
   const course = await Course.findByIdAndDelete(id);
