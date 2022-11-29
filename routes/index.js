@@ -58,7 +58,7 @@ router.post("/credit", isAuthenticated, async (req, res, next) => {
   const theUser = await User.findById(userConnected);
   const userFound = await User.findByIdAndUpdate(
     userConnected,
-    { credit: theUser.credit + body },
+    { credit: +theUser.credit + +body },
     {
       new: true,
     }

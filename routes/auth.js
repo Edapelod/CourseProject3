@@ -9,9 +9,9 @@ router.post("/signup", uploader.single("imageUrl"), async (req, res) => {
   try {
     const salt = bcrypt.genSaltSync(11);
     const passwordHash = bcrypt.hashSync(req.body.password, salt);
-      console.log(req.file.path);
+    console.log(req.file.path);
     await User.create({
-      profile:req.file.path,
+      profile: req.file.path,
       username: req.body.username,
       password: passwordHash,
       email: req.body.email,
@@ -19,12 +19,10 @@ router.post("/signup", uploader.single("imageUrl"), async (req, res) => {
     });
     res.status(201).json({ msg: "Succesfully created" });
   } catch (error) {
-    console.log(error.message);
+    console.log("the error", error.message);
     res.status(404).json({ errorMessage: error.message });
   }
 });
-
-
 
 router.post("/login", async (req, res) => {
   console.log(req.body);
@@ -63,8 +61,7 @@ router.post("/login", async (req, res) => {
 
 router.get("/verify", isAuthenticated, (req, res) => {
   console.log(`req.payload`, req.payload);
-  res.status(200).json({ payload: req.payload, message: 'Token OK' })
-
+  res.status(200).json({ payload: req.payload, message: "Token OK" });
 });
 
 module.exports = router;
