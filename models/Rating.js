@@ -8,7 +8,10 @@ const ratingSchema = new Schema({
     type: Number,
 },
  
-createdBy:{type: Schema.Types.ObjectId, ref:"User"},
+createdBy:{
+  type: Schema.Types.ObjectId, ref:"User",
+  unique: true,
+},
 
 courseID:{type: Schema.Types.ObjectId, ref:"Course"}
   

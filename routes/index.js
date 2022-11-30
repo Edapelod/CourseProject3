@@ -48,16 +48,17 @@ router.get("/course/:id", async (req, res, next) => {
 ////////////////// Rating /////////////////
 
 // getRate
-// router.get("/rating/:id", async (req, res, next) => {
-//   try {
-//     const { id } = req.params;
-//     const course = await Rating.findById(id);
+router.get("/rating/:id", async (req, res, next) => {
+  try {
+    
+    const { id } = req.params;
+    const rate = await Rating.findOne({"courseID":id});
   
-//     res.json({ ...course._doc});
-//   } catch (error) {
-//     res.status(404).json({ message: "No Course with this id" });
-//   }
-// });
+    res.json({ rate});
+  } catch (error) {
+    res.status(404).json({ message: "No Rating match to this course  ID" });
+  }
+});
 
 // setRate
 router.post("/course/:id", isAuthenticated,async (req, res, next) => {
@@ -72,6 +73,17 @@ router.post("/course/:id", isAuthenticated,async (req, res, next) => {
   const createRating = await Rating.create(dataRating);
 
   res.json({ msg: "Succesfully Updated", createRating });
+  
+});
+
+
+////// delete rate
+
+router.delete("/rating/:id", async (req, res, next) => {
+  const { id } = req.params;
+  const course = await Rating.findOneAndDelete({"courseID":id, id});
+
+  res.json({ msg: "Succesfully Deleted", course });
 });
 
 //////////////////////////////////////////////
