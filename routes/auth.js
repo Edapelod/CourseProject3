@@ -38,30 +38,33 @@ router.get("/auth/profile/:id", async (req, res, next) => {
 
 //////// update user
 
-router.put("/profile/:id",uploader.single("imageUrl"),async (req, res, next) => {
-  const { id } = req.params;
-  console.log(id)
-try {
-  const salt = bcrypt.genSaltSync(11);
-  const passwordHash = bcrypt.hashSync(req.body.password, salt);
-  const data = {
-    username: req.body.username,
-    email: req.body.email,
-    password: passwordHash,
-    membership: req.body.membership,
-    profile: req.file.path,
-  };
-  console.log(data)
-  const edit = await User.findByIdAndUpdate(id, data, {
-    new: true,
-  });
-  res.json({ msg: "Succesfully Updated", edit });
-} catch (error) {
-  console.log("the error", error.message);
-    res.status(404).json({ errorMessage: error.message });
-}
-
-});
+router.put(
+  "/profile/:id",
+  uploader.single("imageUrl"),
+  async (req, res, next) => {
+    const { id } = req.params;
+    console.log(id);
+    try {
+      const salt = bcrypt.genSaltSync(11);
+      const passwordHash = bcrypt.hashSync(req.body.password, salt);
+      const data = {
+        username: req.body.username,
+        email: req.body.email,
+        password: passwordHash,
+        membership: req.body.membership,
+        profile: req.file.path,
+      };
+      console.log(data);
+      const edit = await User.findByIdAndUpdate(id, data, {
+        new: true,
+      });
+      res.json({ msg: "Succesfully Updated", edit });
+    } catch (error) {
+      console.log("the error", error.message);
+      res.status(404).json({ errorMessage: error.message });
+    }
+  }
+);
 
 router.post("/login", async (req, res) => {
   console.log(req.body);
@@ -98,9 +101,12 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.get("/verify", isAuthenticated, (req, res) => {
+router.get("/verify", isAuthenticated, async (req, res) => {
+  const findUser = await User.findById(req.payload.user._id);
   console.log(`req.payload`, req.payload);
-  res.status(200).json({ payload: req.payload, message: "Token OK" });
+  res
+    .status(200)
+    .json({ payload: req.payload, message: "Token OK", findUser: findUser });
 });
 
 module.exports = router;
