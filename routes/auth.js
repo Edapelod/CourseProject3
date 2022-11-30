@@ -25,7 +25,19 @@ router.post("/signup", uploader.single("imageUrl"), async (req, res) => {
   }
 });
 
-// ,
+router.get("/auth/profile/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+
+    res.json({ ...user._doc });
+  } catch (error) {
+    res.status(404).json({ message: "No User with this id" });
+  }
+});
+
+//////// update user
+
 router.put("/profile/:id",uploader.single("imageUrl"),async (req, res, next) => {
   const { id } = req.params;
   console.log(id)

@@ -17,7 +17,7 @@ const courseSchema = new Schema({
   video: {
     type: String,
   },
-  // createdby:{type: Schema.Types.ObjectId, ref:"User"}
+  credit:{type: Schema.Types.ObjectId, ref:"User"}
   
 });
 

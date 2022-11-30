@@ -1,11 +1,10 @@
 const router = require("express").Router();
 const isAuthenticated = require("../middlewares/isAuthenticated");
 const User = require("../models/User.model");
-
 const Course = require("../models/Course");
 const uploader = require("../middlewares/cloudinary.config.js");
 const { json } = require("express");
-
+const Rating = require("../models/Rating");
 router.get("/courses", async (req, res, next) => {
   const courses = await Course.find();
 
@@ -21,6 +20,7 @@ router.post("/create", uploader.single("imageUrl"), async (req, res, next) => {
     description: req.body.description,
     image: req.file.path,
   };
+  
   try {
     console.log(data);
     const createCourse = await Course.create(data);
@@ -31,25 +31,51 @@ router.post("/create", uploader.single("imageUrl"), async (req, res, next) => {
   }
 });
 
+
+
+
 router.get("/course/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const course = await Course.findById(id);
-
-    res.json({ ...course._doc });
+  
+    res.json({ ...course._doc});
   } catch (error) {
     res.status(404).json({ message: "No Course with this id" });
   }
 });
 
-router.put("/course/:id", async (req, res, next) => {
+////////////////// Rating /////////////////
+
+// getRate
+// router.get("/rating/:id", async (req, res, next) => {
+//   try {
+//     const { id } = req.params;
+//     const course = await Rating.findById(id);
+  
+//     res.json({ ...course._doc});
+//   } catch (error) {
+//     res.status(404).json({ message: "No Course with this id" });
+//   }
+// });
+
+// setRate
+router.post("/course/:id", isAuthenticated,async (req, res, next) => {
   const { id } = req.params;
-  const body = req.body;
-  const course = await Course.findByIdAndUpdate(id, body, {
-    new: true,
-  });
-  res.json({ msg: "Succesfully Updated", course });
+
+  const dataRating = {
+    comment: req.body.comment,
+    rating: req.body.rating,
+    courseID:req.params.id,
+    createdBy:req.payload.user._id
+  }
+  const createRating = await Rating.create(dataRating);
+
+  res.json({ msg: "Succesfully Updated", createRating });
 });
+
+//////////////////////////////////////////////
+
 
 router.post("/credit", isAuthenticated, async (req, res, next) => {
   const userConnected = req.payload.user._id;

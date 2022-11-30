@@ -30,8 +30,14 @@ const userSchema = new Schema({
   },
   profile:{
     type:String,
+  },
+  role:{
+    type:String,
+    enum: ["admin", "user"],
+    default: "user",
   }
 });
+
 
 const User = model("User", userSchema);
 
