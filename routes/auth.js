@@ -43,7 +43,7 @@ router.put(
   uploader.single("imageUrl"),
   async (req, res, next) => {
     const { id } = req.params;
-    console.log(id);
+    console.log("hello");
     try {
       const salt = bcrypt.genSaltSync(11);
       const passwordHash = bcrypt.hashSync(req.body.password, salt);
@@ -54,7 +54,7 @@ router.put(
         membership: req.body.membership,
         profile: req.file.path,
       };
-      console.log(data);
+      console.log("the data", data);
       const edit = await User.findByIdAndUpdate(id, data, {
         new: true,
       });
@@ -103,7 +103,6 @@ router.post("/login", async (req, res) => {
 
 router.get("/verify", isAuthenticated, async (req, res) => {
   const findUser = await User.findById(req.payload.user._id);
-  console.log(`req.payload`, req.payload);
   res
     .status(200)
     .json({ payload: req.payload, message: "Token OK", findUser: findUser });

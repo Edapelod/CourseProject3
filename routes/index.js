@@ -84,7 +84,7 @@ router.delete("/rating/:id", async (req, res, next) => {
 
 router.post("/credit", isAuthenticated, async (req, res, next) => {
   const userConnected = req.payload.user._id;
-  console.log("user console", userConnected);
+
   const body = req.body.credit;
   const theUser = await User.findById(userConnected);
   const userFound = await User.findByIdAndUpdate(
