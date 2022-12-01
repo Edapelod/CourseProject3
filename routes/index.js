@@ -20,7 +20,7 @@ router.post("/create", uploader.single("imageUrl"), async (req, res, next) => {
     description: req.body.description,
     image: req.file.path,
   };
-  
+
   try {
     console.log(data);
     const createCourse = await Course.create(data);
@@ -31,15 +31,12 @@ router.post("/create", uploader.single("imageUrl"), async (req, res, next) => {
   }
 });
 
-
-
-
 router.get("/course/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const course = await Course.findById(id);
-  
-    res.json({ ...course._doc});
+
+    res.json({ ...course._doc });
   } catch (error) {
     res.status(404).json({ message: "No Course with this id" });
   }
@@ -50,44 +47,40 @@ router.get("/course/:id", async (req, res, next) => {
 // getRate
 router.get("/rating/:id", async (req, res, next) => {
   try {
-    
     const { id } = req.params;
-    const rate = await Rating.findOne({"courseID":id});
-  
-    res.json({ rate});
+    const rate = await Rating.findOne({ courseID: id });
+
+    res.json({ rate });
   } catch (error) {
     res.status(404).json({ message: "No Rating match to this course  ID" });
   }
 });
 
 // setRate
-router.post("/course/:id", isAuthenticated,async (req, res, next) => {
+router.post("/course/:id", isAuthenticated, async (req, res, next) => {
   const { id } = req.params;
 
   const dataRating = {
     comment: req.body.comment,
     rating: req.body.rating,
-    courseID:req.params.id,
-    createdBy:req.payload.user._id
-  }
+    courseID: req.params.id,
+    createdBy: req.payload.user._id,
+  };
   const createRating = await Rating.create(dataRating);
 
   res.json({ msg: "Succesfully Updated", createRating });
-  
 });
-
 
 ////// delete rate
 
 router.delete("/rating/:id", async (req, res, next) => {
   const { id } = req.params;
-  const course = await Rating.findOneAndDelete({"courseID":id, id});
+  const course = await Rating.findOneAndDelete({ courseID: id, id });
 
   res.json({ msg: "Succesfully Deleted", course });
 });
 
 //////////////////////////////////////////////
-
 
 router.post("/credit", isAuthenticated, async (req, res, next) => {
   const userConnected = req.payload.user._id;
@@ -96,16 +89,13 @@ router.post("/credit", isAuthenticated, async (req, res, next) => {
   const theUser = await User.findById(userConnected);
   const userFound = await User.findByIdAndUpdate(
     userConnected,
-    { credit: +theUser.credit + +body },
+    { credit: +theUser?.credit + +body },
     {
       new: true,
     }
   );
   res.json({ msg: "Credit updated", userFound });
 });
-
-
-
 
 router.delete("/course/:id", async (req, res, next) => {
   const { id } = req.params;
